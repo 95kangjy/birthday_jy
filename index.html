@@ -1,31 +1,395 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>생일 축하합니다!</title>
+  <meta charset="UTF-8" />
+  <title>집들이 초대합니다! 🎉</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* 컬러 팔레트 */
+    :root {
+      --bg1: #ff7eb3;
+      --bg2: #ff758c;
+      --bg3: #ffb199;
+      --bg4: #8fd3f4;
+      --text: #ffffff;
+      --accent: #ffd166;
+      --card-bg: rgba(255, 255, 255, 0.12);
+      --glass: rgba(255, 255, 255, 0.18);
+      --shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    /* 배경 & 파티클 */
     body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Pretendard", "Noto Sans KR", "Arial", sans-serif;
+      background: radial-gradient(circle at top,
+        #fcb045,      /* 위쪽 보라빛 */
+        #833ab4 70%,  /* 중간 남색 */
+        #000000 100%  /* 아래쪽 밤 */
+      );
+      color: #e0e0e0;
+	  overflow-x: hidden;
+    }
+    .sparkle {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.7) 50%, transparent 51%),
+        radial-gradient(3px 3px at 70% 60%, rgba(255,255,255,0.5) 50%, transparent 51%),
+        radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.6) 50%, transparent 51%);
+      animation: twinkle 6s linear infinite;
+      opacity: 0.6;
+    }
+    @keyframes twinkle {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* 네온 타이틀 */
+    header {
       text-align: center;
-      background: linear-gradient(to right, pink, skyblue);
-      font-family: "Arial", sans-serif;
+      padding: 60px 20px 30px;
     }
-    h1 {
-      font-size: 3em;
-      margin-top: 50px;
+    .title {
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #006400; /* 진한 초록색으로 변경 */
+      text-shadow:
+        0 0 8px rgba(255,255,255,0.6),
+        0 0 18px rgba(255,209,102,0.6),
+        0 0 36px rgba(255,209,102,0.3);
+      margin: 0 0 8px;
     }
-    img, video {
-      margin-top: 20px;
-      border-radius: 20px;
-      max-width: 80%;
+    .subtitle {
+      font-size: clamp(1rem, 2.2vw, 1.4rem);
+      opacity: 0.95;
     }
+
+    /* 초대 섹션 */
+    .invite {
+	  max-width: 1000px;
+      margin: 30px auto;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .invite {
+        grid-template-columns: 1.1fr 1fr;
+        align-items: center;
+      }
+    }
+    .invite-card {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 24px;
+    }
+    .invite-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.6rem;
+    }
+    .invite-card p {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 12px 18px;
+      background: linear-gradient(90deg, #ffd166, #fca311);
+      color: #2b2b2b;
+      font-weight: 700;
+      border-radius: 999px;
+      text-decoration: none;
+      transform: translateY(0);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+    .cta:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 14px 26px rgba(0,0,0,0.28);
+    }
+
+    .invite-image {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .invite-image img {
+      width: min(420px, 80vw);
+      border-radius: 22px;
+      box-shadow: 0 20px 40px var(--shadow);
+      border: 2px dashed rgba(255,255,255,0.6);
+      animation: float 4.8s ease-in-out infinite;
+      background: rgba(255,255,255,0.08);
+      padding: 14px;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(-1deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* 음식 갤러리 */
+    .gallery-wrap {
+      max-width: 1100px;
+      margin: 20px auto 60px;
+      padding: 0 22px;
+      margin-top: 5cm;
+   }
+    .section-title {
+      font-size: 1.8rem;
+      margin: 14px 0 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      perspective: 1000px;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      padding-top: 125%;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(.2,.7,.2,1);
+    }
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      backface-visibility: hidden;
+      box-shadow: 0 15px 30px var(--shadow);
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+    .card-front {
+      background: var(--card-bg);
+    }
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.1) contrast(1.05);
+    }
+    .card-back {
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      transform: rotateY(180deg);
+      display: grid;
+      place-items: center;
+      padding: 14px;
+    }
+    .card-back .label {
+      color: #1b1b1b;
+      background: #ffe8a3;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-weight: 700;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+
+    /* 푸터 */
+    footer {
+      text-align: center;
+      padding: 38px 20px 50px;
+	  opacity: 0.9;
+      margin-bottom: 3cm;
+    }
+    .small {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #cc0000;
+      text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #ff0000,
+        0 0 20px #00ff00,
+        0 0 40px #ff0000;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+     @keyframes glow {
+      from { text-shadow: 0 0 5px #fff, 0 0 10px #ff0000; }
+      to   { text-shadow: 0 0 15px #fff, 0 0 30px #00ff00; }
+    }
+
+    .slideshow {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .slideshow img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .slideshow img.active {
+      opacity: 1;
+    }
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      font-size: 1.2em;
+      animation: fall 10s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0.8; }
+    }
+.snowflake:nth-child(1) { left: 10%; animation-duration: 4s; font-size: 1em; }
+.snowflake:nth-child(2) { left: 30%; animation-duration: 6s; font-size: 1.4em; }
+.snowflake:nth-child(3) { left: 50%; animation-duration: 10s; font-size: 1.2em; }
+.snowflake:nth-child(4) { left: 70%; animation-duration: 12s; font-size: 1.6em; }
+.snowflake:nth-child(5) { left: 90%; animation-duration: 5s; font-size: 1.1em; }
+.snowflake:nth-child(6) { left: 70%; animation-duration: 7s; font-size: 1.1em; }
+
   </style>
 </head>
 <body>
-  <h1>🎉 생일 축하해요 🎉</h1>
-  <p>행복한 하루 보내길 바래요 💖</p>
+  <div class="sparkle" aria-hidden="true"></div>
+  <div class="snowflake">❄</div>
+  <div class="snowflake">✻</div>
+  <div class="snowflake">❅</div>
+  <div class="snowflake">❄</div>
+  <div class="snowflake">✻</div>
+  <div class="snowflake">*</div>
 
-  //<!-- 사진 -->
-  //<img src="cake.jpg" alt="케이크 사진">
+  <header>
+    <h1 class="title">🏠 대리강's 집들이에 초대합니다!</h1>
+    <p class="subtitle">배터질 준비하세요 — 같이 축하해요 ✨</p>
+  </header>
+
+  <main class="invite">
+    <section class="invite-card">
+      <h2>날짜 & 장소</h2>
+      <p>12월 5일(목) 오후 6시30분, 오산의 새 집에서 만나요.</p>
+      <p>경기도 오산시 내삼미로109 삼미마을 16단지 1602동 702호</p>
+      <p>편하게 오세요! 간단한 선물보다 함께하는 시간이 제일 좋아요 💖</p>
+      <p>는 아니고 두둑하게 오세요.</p>
+	  <a class="cta" href="#food">메뉴 구경하기</a>
+    </section>
+
+    <section class="invite-image" aria-label="초대 이미지">
+      <!-- 이모티콘 초대 이미지: 파일명만 교체하세요 -->
+      <img src="jy/액막이인형.png" alt="초대 이모티콘" />
+    </section>
+  </main>
+
+  <section id="food" class="gallery-wrap">
+    <h2 class="section-title">오늘의 음식 라인업 🍽️</h2>
+
+    <div class="grid">
+      <!-- 카드 1 -->
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="jy/전골.png" alt="대표 음식 1" />
+          </div>
+          <div class="card-face card-back">
+            <div class="label">대표 요리</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 2 -->
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="jy/떡볶이.png" alt="대표 음식 2" />
+          </div>
+          <div class="card-face card-back">
+            <div class="label">떡볶이</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 4 -->
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="jy/회.png" alt="대표 음식 3" />
+          </div>
+          <div class="card-face card-back">
+            <div class="label">모듬회</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 4 -->
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="jy/피자.png" alt="대표 음식 4" />
+          </div>
+          <div class="card-face card-back">
+            <div class="label">피자</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 5 -->
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+           <div class="slideshow">
+             <img src="jy/술.png" alt="대표 음식 5" />
+             <img src="jy/술2.png" alt="대표 음식 5" />
+             <img src="jy/술3.png" alt="대표 음식 5" />
+             <img src="jy/술4.png" alt="대표 음식 5" />
+           </div>
+          </div>
+          <div class="card-face card-back">
+            <div class="label">주류</div>
+          </div>
+        </div>
+       </div>
+      </div>
+
+  </section>
+
+  <footer>
+    <p class="small">😊 Merry Christmas 😊</p>
+  </footer>
+  <script>
+  const slides = document.querySelectorAll('.slideshow img');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((img, i) => {
+      img.classList.toggle('active', i === index);
+    });
+  }
+
+  setInterval(() => {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+  }, 1000); // 1초마다 변경
+
+  // 초기화
+  showSlide(current);
+</script>
 
 </body>
 </html>
